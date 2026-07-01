@@ -654,6 +654,94 @@
     /* Hide the app until authenticated */
     body:not(.authed) .sidebar,
     body:not(.authed) .main { display: none; }
+    body:not(.authed) .call-widget { display: none; }
+
+    /* ─── FLOATING CALL WIDGET ────────────────── */
+    .call-widget {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 400;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+    }
+    .call-bubble {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 13px 20px;
+      border: none; border-radius: 999px;
+      background: var(--purple); color: #fff;
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(92,80,178,0.38);
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    .call-bubble:hover {
+      background: var(--purple-light);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 26px rgba(92,80,178,0.45);
+    }
+    .call-bubble svg { width: 18px; height: 18px; position: relative; z-index: 1; }
+    .call-bubble span { position: relative; z-index: 1; }
+    /* subtle attention pulse ring */
+    .call-bubble::after {
+      content: ""; position: absolute; inset: 0;
+      border-radius: 999px;
+      box-shadow: 0 0 0 0 rgba(92,80,178,0.45);
+      animation: call-pulse 2.6s ease-out infinite;
+    }
+    @keyframes call-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(92,80,178,0.40); }
+      70% { box-shadow: 0 0 0 14px rgba(92,80,178,0); }
+      100% { box-shadow: 0 0 0 0 rgba(92,80,178,0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .call-bubble::after { animation: none; }
+    }
+
+    .call-popup {
+      width: 288px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 20px 16px;
+      box-shadow: var(--shadow-2);
+      position: relative;
+      display: none;
+      animation: call-pop-in 0.16s ease-out;
+    }
+    .call-popup.open { display: block; }
+    @keyframes call-pop-in {
+      from { opacity: 0; transform: translateY(8px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .call-popup-close {
+      position: absolute; top: 12px; right: 12px;
+      background: none; border: none; cursor: pointer;
+      color: var(--text-tertiary); padding: 2px; line-height: 0;
+    }
+    .call-popup-close:hover { color: var(--text-primary); }
+    .call-popup-close svg { width: 16px; height: 16px; }
+    .call-popup-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--purple-mid); color: var(--purple);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+    .call-popup-icon svg { width: 20px; height: 20px; }
+    .call-popup-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; color: var(--text-primary); }
+    .call-popup-body { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; }
+    .call-popup-number {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px; border-radius: 10px;
+      background: var(--purple); color: #fff;
+      font-size: 15px; font-weight: 700; letter-spacing: 0.2px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .call-popup-number:hover { background: var(--purple-light); }
+    .call-popup-number svg { width: 16px; height: 16px; }
+    .call-popup-hours {
+      text-align: center; font-size: 11px; color: var(--text-tertiary);
+      margin-top: 10px;
+    }
 
     /* ─── AFFORDABILITY IFRAME (responsive) ───── */
     .affordability-frame-wrap {
@@ -1115,6 +1203,31 @@
   </div>
 </div>
 
+<!-- FLOATING CALL WIDGET -->
+<div class="call-widget" id="call-widget">
+  <!-- Popup card -->
+  <div class="call-popup" id="call-popup">
+    <button class="call-popup-close" onclick="toggleCallPopup()" aria-label="Close">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <div class="call-popup-icon">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+    </div>
+    <div class="call-popup-title">We're here to help</div>
+    <div class="call-popup-body">Speak to our support team about your payments, a repayment plan, or any questions about your account.</div>
+    <a class="call-popup-number" href="tel:+442079460958">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+      +44 20 7946 0958
+    </a>
+    <div class="call-popup-hours">Mon–Fri, 8am–8pm · Sat 9am–5pm</div>
+  </div>
+  <!-- Bubble -->
+  <button class="call-bubble" id="call-bubble" onclick="toggleCallPopup()">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+    <span>Call Us Now</span>
+  </button>
+</div>
+
 <!-- SUCCESS TOAST -->
 <div id="toast" style="
   position:fixed;bottom:24px;right:24px;
@@ -1169,6 +1282,20 @@
     if (h && h > 300 && h < 5000) {
       var wrap = document.querySelector('.affordability-frame-wrap');
       if (wrap) wrap.style.height = h + 'px';
+    }
+  });
+
+  // ── Floating call widget
+  function toggleCallPopup() {
+    const p = document.getElementById('call-popup');
+    if (p) p.classList.toggle('open');
+  }
+  // Close popup when clicking outside the widget
+  document.addEventListener('click', function (e) {
+    const w = document.getElementById('call-widget');
+    const p = document.getElementById('call-popup');
+    if (w && p && p.classList.contains('open') && !w.contains(e.target)) {
+      p.classList.remove('open');
     }
   });
 
