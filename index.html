@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Portal — NatWest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f6f3;
+      --surface: #ffffff;
+      --border: #ecebe6;
+      --border-mid: #d8d6cf;
+      --text-primary: #1c1b22;
+      --text-secondary: #6b6a75;
+      --text-tertiary: #a8a6b0;
+      /* Murphy indigo/navy accent (repurposing the --purple tokens app-wide) */
+      --purple: #4338ca;
+      --purple-light: #4f46e5;
+      --purple-mid: #eceafe;
+      --purple-hover: #f4f3fe;
+      --navy: #1e1b4b;
+      --green: #0f9488;
+      --green-bg: #d5f2ee;
+      --amber: #b45309;
+      --amber-bg: #fdf2dc;
+      --red: #dc2626;
+      --red-bg: #fee2e2;
+      --blue: #4338ca;
+      --blue-bg: #eceafe;
+      --radius: 12px;
+      --sidebar-w: 232px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+      font-size: 14px;
+    }
+
+    /* ─── SIDEBAR ─────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      padding: 20px 16px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Tenant branding */
+    .tenant-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .tenant-logo {
+      width: 30px; height: 30px;
+      background: var(--navy);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: white; letter-spacing: -0.5px;
+    }
+    .tenant-name { font-size: 16px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.2px; }
+    .tenant-sub { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+
+    .debtor-pill {
+      background: var(--purple-mid);
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .debtor-pill-name { font-size: 13px; font-weight: 600; color: var(--purple); }
+    .debtor-pill-id { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+
+    /* Nav */
+    .sidebar-nav { padding: 14px 10px; flex: 1; overflow-y: auto; }
+
+    .nav-section-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--text-tertiary);
+      padding: 14px 8px 6px;
+    }
+    .sidebar-nav .nav-section-label:first-child { padding-top: 2px; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 11px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+      color: var(--text-secondary);
+      font-size: 13.5px; font-weight: 500;
+      margin-bottom: 2px;
+      text-decoration: none;
+      position: relative;
+    }
+    .nav-item:hover { background: var(--purple-hover); color: var(--text-primary); }
+    .nav-item.active {
+      background: var(--purple-hover);
+      color: var(--purple);
+      font-weight: 600;
+    }
+    /* Left accent bar on the active item (Murphy style) */
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: -10px; top: 50%; transform: translateY(-50%);
+      width: 3px; height: 20px;
+      background: var(--purple);
+      border-radius: 0 3px 3px 0;
+    }
+    .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--purple);
+      color: white;
+      font-size: 10px; font-weight: 700;
+      border-radius: 99px;
+      padding: 1px 6px;
+    }
+
+    .sidebar-footer {
+      padding: 12px 8px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── MAIN ────────────────────────────────── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .topbar-title { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-size: 13px; font-weight: 500;
+      cursor: pointer; border: none;
+      transition: all 0.12s;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+    .btn-ghost:hover { background: var(--bg); color: var(--text-primary); }
+    .btn-primary {
+      background: var(--purple);
+      color: white;
+      box-shadow: 0 1px 2px rgba(67,56,202,0.25);
+    }
+    .btn-primary:hover { background: var(--purple-light); }
+    .btn-outline {
+      background: var(--surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--bg); }
+    .btn svg { width: 14px; height: 14px; }
+
+    .page { padding: 24px; }
+
+    /* ─── TABS ────────────────────────────────── */
+    .tabs { display: flex; gap: 2px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+    .tab {
+      padding: 10px 16px;
+      font-size: 13.5px; font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.12s;
+    }
+    .tab:hover { color: var(--text-primary); }
+    .tab.active { color: var(--purple); border-bottom-color: var(--purple); font-weight: 600; }
+
+    /* ─── CARDS ───────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Coloured top stripe on KPI cards (Murphy style) */
+    .card.stripe-navy::before,
+    .card.stripe-green::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .card.stripe-navy::before { background: var(--navy); }
+    .card.stripe-green::before { background: var(--green); }
+    .card-label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+    .card-value {
+      font-size: 26px; font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+    .card-sub {
+      font-size: 12px; color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    /* ─── ALERT BANNER ────────────────────────── */
+    .alert {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      border: 1px solid;
+    }
+    .alert-amber { background: var(--amber-bg); border-color: #fcd34d; }
+    .alert-icon { flex-shrink: 0; }
+    .alert-icon svg { width: 18px; height: 18px; color: var(--amber); }
+    .alert-title { font-size: 13.5px; font-weight: 600; color: #92400e; margin-bottom: 2px; }
+    .alert-body { font-size: 12.5px; color: #78350f; }
+
+    /* ─── TABLE ───────────────────────────────── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--bg); }
+    th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-tertiary);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 13px 14px;
+      font-size: 13.5px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--bg); }
+
+    /* ─── BADGE ───────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: 11.5px; font-weight: 600;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-green .badge-dot { background: var(--green); }
+    .badge-amber { background: var(--amber-bg); color: var(--amber); }
+    .badge-amber .badge-dot { background: var(--amber); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+    .badge-red .badge-dot { background: var(--red); }
+    .badge-blue { background: var(--blue-bg); color: var(--blue); }
+    .badge-blue .badge-dot { background: var(--blue); }
+    .badge-accent { background: var(--purple-mid); color: var(--purple); }
+    .badge-accent .badge-dot { background: var(--purple); }
+    .badge-gray { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
+
+    /* Murphy-style neutral status chips */
+    .status-chip {
+      display: inline-flex; align-items: center;
+      padding: 3px 11px;
+      border-radius: 99px;
+      font-size: 12px; font-weight: 500;
+      background: #edecf5;
+      color: #514f66;
+      border: 1px solid #e2e0ee;
+    }
+    .status-chip.chip-accent { background: var(--purple-mid); color: var(--purple); border-color: #dcd8fb; }
+
+    /* ─── PAYMENT PLAN PROGRESS ───────────────── */
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 12px;
+    }
+    .plan-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .plan-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .plan-ref { font-size: 11.5px; color: var(--text-tertiary); }
+    .plan-meta { display: flex; gap: 24px; margin-bottom: 16px; }
+    .plan-meta-item { }
+    .plan-meta-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary); margin-bottom: 3px; }
+    .plan-meta-val { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .progress-bar-wrap { height: 7px; background: var(--bg); border-radius: 99px; overflow: hidden; margin-bottom: 6px; }
+    .progress-bar { height: 100%; background: var(--purple); border-radius: 99px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-secondary); }
+
+    /* ─── INSTALLMENT LIST ────────────────────── */
+    .installment-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .installment-row:last-child { border-bottom: none; }
+    .inst-num { width: 24px; height: 24px; border-radius: 50%; background: var(--purple-mid); color: var(--purple); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .inst-date { font-size: 13px; color: var(--text-secondary); margin-left: 10px; flex: 1; }
+    .inst-amount { font-size: 14px; font-weight: 600; }
+
+    /* ─── DOCUMENT LIST ───────────────────────── */
+    .doc-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .doc-row:last-child { border-bottom: none; }
+    .doc-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--purple-mid); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 12px; }
+    .doc-icon svg { width: 18px; height: 18px; color: var(--purple); }
+    .doc-name { font-size: 13.5px; font-weight: 500; margin-bottom: 2px; }
+    .doc-meta { font-size: 11.5px; color: var(--text-tertiary); }
+    .doc-left { display: flex; align-items: center; }
+
+    /* ─── UPLOAD ZONE ─────────────────────────── */
+    .upload-zone {
+      border: 2px dashed var(--border-mid);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.12s;
+      margin-bottom: 20px;
+    }
+    .upload-zone:hover { border-color: var(--purple); background: var(--purple-hover); }
+    .upload-zone svg { width: 28px; height: 28px; color: var(--text-tertiary); margin-bottom: 10px; }
+    .upload-zone p { font-size: 13.5px; color: var(--text-secondary); }
+    .upload-zone strong { color: var(--purple); }
+
+    /* ─── PAYMENT MODAL ───────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.25);
+      z-index: 200;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      width: 440px;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .modal-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
+    .modal-option {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.12s;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .modal-option:hover { border-color: var(--purple); background: var(--purple-hover); }
+    .modal-option.selected { border-color: var(--purple); background: var(--purple-mid); }
+    .modal-opt-icon { width: 38px; height: 38px; border-radius: 8px; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .modal-opt-icon svg { width: 20px; height: 20px; color: var(--purple); }
+    .modal-opt-title { font-size: 13.5px; font-weight: 600; margin-bottom: 2px; }
+    .modal-opt-sub { font-size: 12px; color: var(--text-secondary); }
+    .modal-footer { display: flex; gap: 10px; margin-top: 24px; }
+    .modal-footer .btn { flex: 1; justify-content: center; }
+    .qr-block { background: var(--bg); border-radius: var(--radius); padding: 24px; text-align: center; margin-top: 16px; display: none; }
+    .qr-block.visible { display: block; }
+    .qr-placeholder { width: 120px; height: 120px; margin: 0 auto 12px; background: var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-tertiary); }
+    .bank-block { display: none; margin-top: 16px; }
+    .bank-block.visible { display: block; }
+    .bank-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .bank-row:last-child { border-bottom: none; }
+    .bank-label { color: var(--text-secondary); }
+    .bank-val { font-weight: 600; }
+
+    /* ─── NOTIFICATION ────────────────────────── */
+    .notif-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .notif-row:last-child { border-bottom: none; }
+    .notif-row:hover { background: var(--bg); }
+    .notif-row.unread { background: var(--purple-hover); }
+    .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); flex-shrink: 0; margin-top: 5px; }
+    .notif-dot.read { background: transparent; }
+    .notif-content { flex: 1; }
+    .notif-title { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; }
+    .notif-body { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 4px; }
+    .notif-time { font-size: 11px; color: var(--text-tertiary); }
+
+    /* ─── SIGN MODAL ──────────────────────────── */
+    .sign-area {
+      border: 1px solid var(--border-mid);
+      border-radius: 8px;
+      height: 120px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+      margin-bottom: 14px;
+      cursor: crosshair;
+      position: relative;
+      overflow: hidden;
+    }
+    .sign-area canvas { position: absolute; inset: 0; }
+    .sign-placeholder { font-size: 13px; color: var(--text-tertiary); pointer-events: none; }
+
+    /* ─── GRID LAYOUTS ────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .two-col-wide { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+
+    /* ─── SECTION VIEWS ───────────────────────── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ─── OVERDUE TAG ─────────────────────────── */
+    .amount-overdue { color: var(--red); font-weight: 700; }
+    .amount-normal { font-weight: 600; }
+
+    /* ─── EMPTY ───────────────────────────────── */
+    .empty { text-align: center; padding: 40px; color: var(--text-tertiary); }
+    .empty svg { width: 40px; height: 40px; margin-bottom: 10px; }
+    /* ─── LOGIN GATE ──────────────────────────── */
+    .login-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: linear-gradient(155deg, #1e1b4b 0%, #312a86 55%, #4338ca 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .login-card {
+      background: var(--surface);
+      border-radius: 16px;
+      width: 100%; max-width: 380px;
+      padding: 32px 28px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }
+    .login-brand { display: flex; align-items: center; gap: 11px; margin-bottom: 26px; }
+    .login-logo {
+      width: 40px; height: 40px; background: #1e1b4b; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px;
+    }
+    .login-brand-name { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+    .login-brand-sub { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+    .login-heading { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
+    .login-subheading { font-size: 13px; color: var(--text-secondary); margin-bottom: 22px; }
+    .login-label {
+      display: block; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-tertiary); margin-bottom: 6px; margin-top: 14px;
+    }
+    .login-input {
+      width: 100%; padding: 11px 13px;
+      border: 1px solid var(--border-mid); border-radius: 9px;
+      font-size: 14px; font-family: inherit; color: var(--text-primary);
+      transition: border-color 0.12s, box-shadow 0.12s;
+    }
+    .login-input:focus {
+      outline: none; border-color: var(--purple);
+      box-shadow: 0 0 0 3px var(--purple-mid);
+    }
+    .login-error {
+      display: none; margin-top: 14px;
+      background: var(--red-bg); color: var(--red);
+      font-size: 12.5px; font-weight: 500;
+      padding: 9px 12px; border-radius: 8px;
+    }
+    .login-error.show { display: block; }
+    .login-btn {
+      width: 100%; margin-top: 22px;
+      padding: 12px; border: none; border-radius: 9px;
+      background: var(--purple); color: #fff;
+      font-size: 14px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: background 0.12s;
+    }
+    .login-btn:hover { background: var(--purple-light); }
+    .login-foot {
+      margin-top: 18px; text-align: center;
+      font-size: 11px; color: var(--text-tertiary);
+    }
+    /* Hide the app until authenticated */
+    body:not(.authed) .sidebar,
+    body:not(.authed) .main { display: none; }
+
+    /* ─── AFFORDABILITY IFRAME (responsive) ───── */
+    .affordability-frame-wrap {
+      width: 100%;
+      /* Fill the space below the topbar; clamp so it never gets tiny or absurdly tall */
+      height: clamp(520px, calc(100vh - 150px), 1100px);
+    }
+    #affordability-iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    @media (max-width: 640px) {
+      .affordability-frame-wrap {
+        /* Phones: give the form more room and let the page scroll */
+        height: clamp(560px, calc(100vh - 120px), 1400px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     LOGIN GATE
+══════════════════════════════════════════════════ -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-logo">N</div>
+      <div>
+        <div class="login-brand-name">NatWest</div>
+        <div class="login-brand-sub">Customer Portal</div>
+      </div>
+    </div>
+    <div class="login-heading">Sign in to your account</div>
+    <div class="login-subheading">Verify your identity to access your payment portal.</div>
+
+    <label class="login-label" for="login-email">Email address</label>
+    <input class="login-input" id="login-email" type="email" placeholder="you@example.com" autocomplete="email" />
+
+    <label class="login-label" for="login-dob">Date of birth</label>
+    <input class="login-input" id="login-dob" type="text" placeholder="DD/MM/YYYY" autocomplete="off" />
+
+    <div class="login-error" id="login-error">The details entered don't match our records. Please try again.</div>
+
+    <button class="login-btn" id="login-btn" onclick="attemptLogin()">Sign In</button>
+    <div class="login-foot">Secured access · NatWest</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="tenant-brand">
+      <div class="tenant-logo">N</div>
+      <div>
+        <div class="tenant-name">NatWest</div>
+        <div class="tenant-sub">Customer Portal</div>
+      </div>
+    </div>
+    <div class="debtor-pill">
+      <div class="debtor-pill-name">Giacomo Rossi</div>
+      <div class="debtor-pill-id">ID: 1NatWestDemo0107</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">My Account</div>
+
+    <a class="nav-item active" onclick="switchView('overview', this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Overview
+    </a>
+
+    <a class="nav-item" onclick="switchView('payments', this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+      Pending Payments
+      <span class="nav-badge">1</span>
+    </a>
+
+    <a class="nav-item" onclick="switchView('plans', this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Payment Plans
+    </a>
+
+    <a class="nav-item" onclick="switchView('affordability', this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Affordability Assessment
+    </a>
+
+    <a class="nav-item" onclick="switchView('documents', this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+      Documents
+    </a>
+
+    <div class="nav-section-label" style="margin-top: 12px;">Activity</div>
+
+    <a class="nav-item" onclick="switchView('notifications', this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      Notifications
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a class="nav-item">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Log Out
+    </a>
+  </div>
+</aside>
+
+<!-- ══════════════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="topbar-title" id="topbar-title">Overview</span>
+      <span class="status-chip chip-accent">Negotiation</span>
+      <span class="status-chip">No action</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline" onclick="openModal('pay-modal')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+        Make a Payment
+      </button>
+      <button class="btn btn-ghost">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Help
+      </button>
+    </div>
+  </div>
+
+  <!-- PAGE CONTENT -->
+  <div class="page">
+
+    <!-- ── OVERVIEW ──────────────────────────── -->
+    <div class="view active" id="view-overview">
+
+      <div class="alert alert-amber">
+        <div class="alert-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        </div>
+        <div>
+          <div class="alert-title">Let's find a plan that works for you</div>
+          <div class="alert-body">You have an outstanding balance of £430.00 on your credit card. Complete your affordability assessment and we'll tailor a repayment option to your budget.</div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="card stripe-navy">
+          <div class="card-label">Current Balance</div>
+          <div class="card-value">£430.00</div>
+          <div class="card-sub">of £430.00 accumulated</div>
+        </div>
+        <div class="card stripe-green">
+          <div class="card-label">Net Collected</div>
+          <div class="card-value" style="color:var(--green)">£0.00</div>
+          <div class="card-sub">0% paid down</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Current Status</div>
+          <div class="card-value" style="font-size:20px">Negotiation</div>
+          <div class="card-sub">30 days past due · 0–30 bucket</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Active Payment Plans</div>
+          <div class="card-value">0</div>
+          <div class="card-sub">Complete assessment to set one up</div>
+        </div>
+      </div>
+
+      <div class="two-col-wide" style="gap:20px">
+        <!-- Debts summary -->
+        <div>
+          <div class="section-header">
+            <div class="section-title">Your Debts</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Product</th>
+                  <th>Original</th>
+                  <th>Outstanding</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span style="font-family:monospace;font-size:12px">1Demo0107</span></td>
+                  <td>Credit Card</td>
+                  <td>£430.00</td>
+                  <td class="amount-normal">£430.00</td>
+                  <td><span class="badge badge-accent"><span class="badge-dot"></span>Negotiation</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent activity -->
+        <div>
+          <div class="section-header">
+            <div class="section-title">Recent Activity</div>
+          </div>
+          <div class="table-wrap">
+            <div class="empty" style="padding:32px 20px">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <p style="font-weight:600;color:var(--text-secondary);margin-bottom:4px">No recent activity yet</p>
+              <p style="font-size:12px;color:var(--text-tertiary)">Your account activity is pending. Updates will appear here once available.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PENDING PAYMENTS ────────────────────── -->
+    <div class="view" id="view-payments">
+      <div class="section-header" style="margin-bottom:20px">
+        <div class="section-title" style="font-size:16px">Pending Payments</div>
+      </div>
+
+      <div class="table-wrap" style="margin-bottom:20px">
+        <table>
+          <thead>
+            <tr>
+              <th>Contract Ref.</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="font-family:monospace;font-size:12px">1Demo0107</span></td>
+              <td>Credit Card outstanding balance</td>
+              <td>30 days past due</td>
+              <td class="amount-normal">£430.00</td>
+              <td><span class="badge badge-accent"><span class="badge-dot"></span>Negotiation</span></td>
+              <td><button class="btn btn-primary" onclick="openModal('pay-modal')" style="padding:5px 12px;font-size:12px">Pay Now</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-amber">
+        <div class="alert-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg></div>
+        <div>
+          <div class="alert-title">Payment options available</div>
+          <div class="alert-body">You can pay in full by bank transfer or QR code, or complete your affordability assessment to arrange an instalment plan. Online card payment will be available soon.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAYMENT PLANS ───────────────────────── -->
+    <div class="view" id="view-plans">
+      <div class="section-header" style="margin-bottom:20px">
+        <div class="section-title" style="font-size:16px">My Payment Plans</div>
+      </div>
+
+      <div class="card" style="text-align:center;padding:44px 24px">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" style="width:42px;height:42px;color:var(--text-tertiary);margin-bottom:14px"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <div style="font-size:15px;font-weight:600;margin-bottom:6px">No active payment plan yet</div>
+        <div style="font-size:13px;color:var(--text-secondary);max-width:420px;margin:0 auto 18px">
+          Your account is in negotiation. Complete your affordability assessment and we'll propose a repayment plan tailored to what you can afford.
+        </div>
+        <button class="btn btn-primary" onclick="switchView('affordability', document.querySelector('.nav-item[onclick*=affordability]'))">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Start Affordability Assessment
+        </button>
+      </div>
+    </div>
+
+    <!-- ── AFFORDABILITY ASSESSMENT ────────────── -->
+    <div class="view" id="view-affordability">
+      <div class="section-header" style="margin-bottom:16px">
+        <div class="section-title" style="font-size:16px">Affordability Assessment</div>
+      </div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;max-width:620px">
+        Complete the Standard Financial Statement below so we can understand your income and outgoings.
+        Your answers help us propose a repayment plan you can realistically afford.
+      </p>
+      <div class="card affordability-frame-wrap" style="padding:0;overflow:hidden">
+        <iframe
+          id="affordability-iframe"
+          src="https://affordability-assessment.getmurphy.ai/sfs/dq8bzpwuxp8e"
+          title="Murphy affordability assessment"
+          loading="lazy"
+          scrolling="yes"
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- ── DOCUMENTS ───────────────────────────── -->
+    <div class="view" id="view-documents">
+      <div class="section-header" style="margin-bottom:20px">
+        <div class="section-title" style="font-size:16px">Documents</div>
+        <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          Upload Document
+        </button>
+        <input id="file-input" type="file" style="display:none" onchange="handleUpload(this)"/>
+      </div>
+
+      <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        <p>Drag & drop files here or <strong>browse</strong></p>
+        <p style="margin-top:4px;font-size:12px">PDF, JPG, PNG up to 10MB</p>
+      </div>
+
+      <div class="section-header" style="margin-bottom:10px">
+        <div class="section-title">All Documents</div>
+      </div>
+      <div class="table-wrap">
+        <div class="empty" style="padding:40px 20px">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          <p style="font-weight:600;color:var(--text-secondary)">No documents yet</p>
+        </div>
+        <div id="uploaded-doc-list"></div>
+      </div>
+    </div>
+
+    <!-- ── NOTIFICATIONS ───────────────────────── -->
+    <div class="view" id="view-notifications">
+      <div class="section-header" style="margin-bottom:20px">
+        <div class="section-title" style="font-size:16px">Notifications</div>
+      </div>
+      <div class="table-wrap">
+        <div class="empty" style="padding:48px 20px">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <p style="font-weight:700;letter-spacing:0.5px;color:var(--text-secondary)">NO NOTIFICATIONS FOR NOW</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page -->
+</div><!-- /main -->
+
+<!-- ══════════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════════ -->
+
+<!-- PAY MODAL -->
+<div class="modal-overlay" id="pay-modal" onclick="closeModalOut(event, 'pay-modal')">
+  <div class="modal">
+    <div class="modal-title">Make a Payment</div>
+    <div class="modal-sub">Select how you'd like to pay your outstanding balance (£430.00)</div>
+
+    <div class="modal-option" onclick="selectPayOpt(this,'bank')" id="opt-bank">
+      <div class="modal-opt-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 6l9-3 9 3M3 6v6m18-6v6M3 12v6m18-6v6M3 18h18M12 3v18"/></svg></div>
+      <div><div class="modal-opt-title">Bank Transfer</div><div class="modal-opt-sub">Receive transfer details and pay via your bank</div></div>
+    </div>
+    <div class="modal-option" onclick="selectPayOpt(this,'qr')" id="opt-qr">
+      <div class="modal-opt-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg></div>
+      <div><div class="modal-opt-title">QR Code Payment</div><div class="modal-opt-sub">Scan with your banking app to pay instantly</div></div>
+    </div>
+    <div class="modal-option" style="opacity:0.5;cursor:not-allowed" id="opt-card">
+      <div class="modal-opt-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div>
+      <div><div class="modal-opt-title">Card Payment <span class="badge badge-gray" style="font-size:10px;padding:2px 7px;margin-left:4px">Coming Soon</span></div><div class="modal-opt-sub">Phase 2 — online card payment via Stripe</div></div>
+    </div>
+
+    <!-- Bank transfer details -->
+    <div class="bank-block" id="bank-block">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-tertiary);margin-bottom:8px">Transfer Details</div>
+      <div class="bank-row"><span class="bank-label">Beneficiary</span><span class="bank-val">NatWest</span></div>
+      <div class="bank-row"><span class="bank-label">IBAN</span><span class="bank-val" style="color:var(--text-tertiary)">—</span></div>
+      <div class="bank-row"><span class="bank-label">BIC</span><span class="bank-val" style="color:var(--text-tertiary)">—</span></div>
+      <div class="bank-row"><span class="bank-label">Reference</span><span class="bank-val" style="color:var(--text-tertiary)">—</span></div>
+      <div class="bank-row"><span class="bank-label">Amount</span><span class="bank-val" style="color:var(--purple)">£430.00</span></div>
+    </div>
+
+    <!-- QR block -->
+    <div class="qr-block" id="qr-block">
+      <div class="qr-placeholder">QR Code</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:4px">£430.00</div>
+      <div style="font-size:12px;color:var(--text-secondary)">Scan with your banking app</div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('pay-modal')">Cancel</button>
+      <button class="btn btn-primary" id="pay-confirm-btn" onclick="confirmPayment()" disabled style="opacity:0.5;cursor:not-allowed">Confirm Instructions Sent</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIGN MODAL -->
+<div class="modal-overlay" id="sign-modal" onclick="closeModalOut(event, 'sign-modal')">
+  <div class="modal" style="width:520px">
+    <div class="modal-title">Sign Repayment Agreement</div>
+    <div class="modal-sub">Credit Card Repayment Agreement — 1Demo0107 · £430.00 outstanding</div>
+
+    <div style="background:var(--bg);border-radius:8px;padding:14px;font-size:12.5px;color:var(--text-secondary);max-height:120px;overflow-y:auto;margin-bottom:16px;line-height:1.6">
+      I, Giacomo Rossi (ID: 1NatWestDemo0107), agree to the repayment terms as described above for the outstanding balance of £430.00 on contract 1Demo0107. I understand that this agreement constitutes a legally binding obligation and that the schedule will be confirmed following my affordability assessment...
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-tertiary);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Draw your signature below</div>
+    <canvas id="sig-canvas" width="460" height="120" style="border:1px solid var(--border-mid);border-radius:8px;background:white;cursor:crosshair;display:block;margin-bottom:14px"></canvas>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <span style="font-size:12px;color:var(--text-tertiary)">By signing you agree to the terms above</span>
+      <button class="btn btn-ghost" style="font-size:12px" onclick="clearCanvas()">Clear</button>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('sign-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitSignature()">Submit Signature</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS TOAST -->
+<div id="toast" style="
+  position:fixed;bottom:24px;right:24px;
+  background:var(--green);color:white;
+  padding:12px 20px;border-radius:10px;
+  font-size:13.5px;font-weight:600;
+  display:none;z-index:999;
+  box-shadow:0 4px 20px rgba(0,0,0,0.2);
+  transition:all 0.3s;
+"></div>
+
+<script>
+  // ── Login gate
+  const VALID_EMAIL = 'giacomo.rossi@getmurphy.ai';
+  const VALID_DOB = '04/01/1981';
+
+  function normDob(v) {
+    // Accept /, -, . separators and un-padded parts → normalise to DD/MM/YYYY
+    const parts = v.trim().split(/[\/.\-]/).map(p => p.trim());
+    if (parts.length !== 3) return v.trim();
+    const [d, m, y] = parts;
+    if (!d || !m || !y) return v.trim();
+    return `${d.padStart(2,'0')}/${m.padStart(2,'0')}/${y}`;
+  }
+
+  function attemptLogin() {
+    const email = document.getElementById('login-email').value.trim().toLowerCase();
+    const dob = normDob(document.getElementById('login-dob').value);
+    const ok = email === VALID_EMAIL.toLowerCase() && dob === VALID_DOB;
+    if (ok) {
+      document.getElementById('login-overlay').style.display = 'none';
+      document.body.classList.add('authed');
+    } else {
+      document.getElementById('login-error').classList.add('show');
+    }
+  }
+
+  // Enter key submits from either field
+  ['login-email', 'login-dob'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') attemptLogin(); });
+  });
+
+  // ── Affordability iframe: optional auto-resize
+  // If the embedded SFS app posts its content height, grow the frame to fit.
+  // Falls back silently to the responsive CSS height if it never posts anything.
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    var h = null;
+    if (typeof d === 'number') h = d;
+    else if (d && typeof d === 'object') h = d.height || d.iframeHeight || d.scrollHeight || null;
+    if (h && h > 300 && h < 5000) {
+      var wrap = document.querySelector('.affordability-frame-wrap');
+      if (wrap) wrap.style.height = h + 'px';
+    }
+  });
+
+  // ── View switching
+  function switchView(name, el) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    el.classList.add('active');
+    const titles = {overview:'Overview',payments:'Pending Payments',plans:'Payment Plans',affordability:'Affordability Assessment',documents:'Documents',notifications:'Notifications'};
+    document.getElementById('topbar-title').textContent = titles[name] || name;
+  }
+
+  // ── Modals
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    if (id === 'pay-modal') resetPayModal();
+  }
+  function closeModalOut(e, id) {
+    if (e.target === document.getElementById(id)) closeModal(id);
+  }
+
+  // ── Pay modal logic
+  let selectedPay = null;
+  function selectPayOpt(el, type) {
+    document.querySelectorAll('.modal-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPay = type;
+    document.getElementById('bank-block').classList.toggle('visible', type === 'bank');
+    document.getElementById('qr-block').classList.toggle('visible', type === 'qr');
+    const btn = document.getElementById('pay-confirm-btn');
+    btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+  }
+  function resetPayModal() {
+    document.querySelectorAll('.modal-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('bank-block').classList.remove('visible');
+    document.getElementById('qr-block').classList.remove('visible');
+    const btn = document.getElementById('pay-confirm-btn');
+    btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed';
+    selectedPay = null;
+  }
+  function confirmPayment() {
+    closeModal('pay-modal');
+    showToast('✓ Payment instructions sent to your email');
+  }
+
+  // ── Signature canvas
+  const canvas = document.getElementById('sig-canvas');
+  const ctx = canvas ? canvas.getContext('2d') : null;
+  let drawing = false;
+  if (canvas) {
+    canvas.addEventListener('mousedown', e => { drawing = true; ctx.beginPath(); ctx.moveTo(...pos(e)); });
+    canvas.addEventListener('mousemove', e => { if (!drawing) return; ctx.lineTo(...pos(e)); ctx.strokeStyle='#1d1d1f'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); });
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('mouseleave', () => drawing = false);
+  }
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    return [e.clientX - r.left, e.clientY - r.top];
+  }
+  function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+  function submitSignature() {
+    closeModal('sign-modal');
+    showToast('✓ Agreement signed successfully');
+  }
+
+  // ── File upload
+  function handleUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const list = document.getElementById('uploaded-doc-list');
+    const row = document.createElement('div');
+    row.className = 'doc-row';
+    row.innerHTML = `
+      <div class="doc-left">
+        <div class="doc-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+        <div>
+          <div class="doc-name">${file.name}</div>
+          <div class="doc-meta">Just uploaded · ${(file.size/1024).toFixed(0)} KB</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="badge badge-blue"><span class="badge-dot"></span>Uploaded</span>
+      </div>
+    `;
+    list.prepend(row);
+    showToast('✓ Document uploaded successfully');
+    input.value = '';
+  }
+
+  // ── Toast
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3500);
+  }
+</script>
+</body>
+</html>
