@@ -5,38 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Customer Portal — NatWest</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f7f6f3;
-      --surface: #ffffff;
-      --border: #ecebe6;
-      --border-mid: #d8d6cf;
-      --text-primary: #1c1b22;
-      --text-secondary: #6b6a75;
-      --text-tertiary: #a8a6b0;
-      /* Murphy indigo/navy accent (repurposing the --purple tokens app-wide) */
-      --purple: #4338ca;
-      --purple-light: #4f46e5;
-      --purple-mid: #eceafe;
-      --purple-hover: #f4f3fe;
-      --navy: #1e1b4b;
-      --green: #0f9488;
-      --green-bg: #d5f2ee;
-      --amber: #b45309;
-      --amber-bg: #fdf2dc;
+      --bg: #e9e7ef;
+      --surface: #f5f3f6;
+      --border: #e3e1ea;
+      --border-mid: #cccbd9;
+      --text-primary: #160f34;
+      --text-secondary: #7d7984;
+      --text-tertiary: #aea8d4;
+      /* Brand palette accent (repurposing the --purple tokens app-wide) */
+      --purple: #5d51b2;
+      --purple-light: #62579c;
+      --purple-mid: #e7e5f4;
+      --purple-hover: #f1f0f8;
+      --navy: #160f34;
+      --green: #33795e;
+      --green-bg: #dcefe6;
+      --amber: #62579c;
+      --amber-bg: #e7e5f4;
       --red: #dc2626;
       --red-bg: #fee2e2;
-      --blue: #4338ca;
-      --blue-bg: #eceafe;
+      --blue: #5d51b2;
+      --blue-bg: #e7e5f4;
       --radius: 12px;
       --sidebar-w: 232px;
     }
 
     body {
-      font-family: 'Inter', -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text-primary);
       display: flex;
@@ -151,18 +151,18 @@
     .topbar {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-      height: 52px;
+      padding: 0 28px;
+      height: 60px;
       display: flex; align-items: center; justify-content: space-between;
       position: sticky; top: 0; z-index: 50;
     }
-    .topbar-title { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+    .topbar-title { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
     .topbar-actions { display: flex; align-items: center; gap: 10px; }
 
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 7px 14px;
-      border-radius: 7px;
+      padding: 8px 15px;
+      border-radius: 9px;
       font-size: 13px; font-weight: 500;
       cursor: pointer; border: none;
       transition: all 0.12s;
@@ -175,7 +175,7 @@
     .btn-primary {
       background: var(--purple);
       color: white;
-      box-shadow: 0 1px 2px rgba(67,56,202,0.25);
+      box-shadow: 0 1px 2px rgba(93,81,178,0.28);
     }
     .btn-primary:hover { background: var(--purple-light); }
     .btn-outline {
@@ -186,7 +186,7 @@
     .btn-outline:hover { background: var(--bg); }
     .btn svg { width: 14px; height: 14px; }
 
-    .page { padding: 24px; }
+    .page { padding: 28px; }
 
     /* ─── TABS ────────────────────────────────── */
     .tabs { display: flex; gap: 2px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
@@ -244,19 +244,124 @@
       margin-bottom: 24px;
     }
 
+    /* ─── PROFILE PANEL (Murphy overview) ─────── */
+    .profile-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px 28px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 32px;
+      box-shadow: 0 1px 2px rgba(28,27,34,0.04), 0 8px 24px rgba(28,27,34,0.03);
+    }
+    .profile-identity {
+      display: flex; align-items: center; gap: 15px;
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #dcefe6; color: #33795e;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; letter-spacing: -0.5px;
+      flex-shrink: 0;
+      border: 1px solid #bcdccd;
+    }
+    .profile-name { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .profile-cust-id {
+      font-size: 12px; color: var(--text-secondary); margin-top: 3px;
+      font-family: ui-monospace, monospace; letter-spacing: 0.2px;
+    }
+    .profile-fields { display: flex; flex-direction: column; }
+    .profile-field {
+      display: grid; grid-template-columns: 150px 1fr;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-field:last-child { border-bottom: none; }
+    .profile-field-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .profile-field-label svg { width: 16px; height: 16px; color: var(--text-tertiary); flex-shrink: 0; }
+    .profile-field-value { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+
+    /* KPI mini-cards on the right of the profile panel */
+    .kpi-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-content: start; }
+    .kpi-card {
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 17px 18px 16px;
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .kpi-card:hover { box-shadow: 0 4px 16px rgba(28,27,34,0.06); }
+    .kpi-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--border);
+    }
+    .kpi-card.kpi-navy::before { background: var(--navy); }
+    .kpi-card.kpi-green::before { background: var(--green); }
+    .kpi-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9px;
+      color: var(--text-secondary); margin-bottom: 11px;
+    }
+    .kpi-value { font-size: 25px; font-weight: 700; letter-spacing: -0.6px; line-height: 1.1; }
+    .kpi-value .kpi-unit { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-left: 4px; }
+    .kpi-sub { font-size: 11.5px; color: var(--text-secondary); margin-top: 6px; }
+
+    @media (max-width: 860px) {
+      .profile-panel { grid-template-columns: 1fr; }
+    }
+
+    /* ─── COLLAPSIBLE SECTION HEADER ──────────── */
+    .msection {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(28,27,34,0.04);
+    }
+    .msection-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .msection-head:hover { background: var(--purple-hover); }
+    .msection-chevron { color: var(--text-tertiary); transition: transform 0.15s; }
+    .msection-chevron svg { width: 16px; height: 16px; display: block; }
+    .msection.collapsed .msection-chevron { transform: rotate(-90deg); }
+    .msection-icon { color: var(--purple); display: flex; }
+    .msection-icon svg { width: 17px; height: 17px; }
+    .msection-title { font-size: 14.5px; font-weight: 600; }
+    .msection-meta {
+      margin-left: auto; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-tertiary);
+    }
+    .msection-body { padding: 4px 20px 20px; }
+    .msection.collapsed .msection-body { display: none; }
+
     /* ─── ALERT BANNER ────────────────────────── */
     .alert {
       display: flex; align-items: flex-start; gap: 12px;
-      padding: 14px 16px;
-      border-radius: var(--radius);
-      margin-bottom: 24px;
+      padding: 15px 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
       border: 1px solid;
     }
-    .alert-amber { background: var(--amber-bg); border-color: #fcd34d; }
+    .alert-amber { background: var(--purple-hover); border-color: #e0dcfb; }
     .alert-icon { flex-shrink: 0; }
-    .alert-icon svg { width: 18px; height: 18px; color: var(--amber); }
-    .alert-title { font-size: 13.5px; font-weight: 600; color: #92400e; margin-bottom: 2px; }
-    .alert-body { font-size: 12.5px; color: #78350f; }
+    .alert-icon svg { width: 18px; height: 18px; color: var(--purple); }
+    .alert-title { font-size: 13.5px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+    .alert-body { font-size: 12.5px; color: var(--text-secondary); }
 
     /* ─── TABLE ───────────────────────────────── */
     .section-header {
@@ -476,7 +581,7 @@
     /* ─── LOGIN GATE ──────────────────────────── */
     .login-overlay {
       position: fixed; inset: 0; z-index: 500;
-      background: linear-gradient(155deg, #1e1b4b 0%, #312a86 55%, #4338ca 100%);
+      background: linear-gradient(155deg, #160f34 0%, #3a354c 45%, #5d51b2 100%);
       display: flex; align-items: center; justify-content: center;
       padding: 24px;
     }
@@ -489,7 +594,7 @@
     }
     .login-brand { display: flex; align-items: center; gap: 11px; margin-bottom: 26px; }
     .login-logo {
-      width: 40px; height: 40px; background: #1e1b4b; border-radius: 8px;
+      width: 40px; height: 40px; background: #160f34; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
       font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px;
     }
@@ -599,8 +704,8 @@
       </div>
     </div>
     <div class="debtor-pill">
-      <div class="debtor-pill-name">Giacomo Rossi</div>
-      <div class="debtor-pill-id">ID: 1NatWestDemo0107</div>
+      <div class="debtor-pill-name">Borja Solé</div>
+      <div class="debtor-pill-id">ID: 2NatWestDemo0107</div>
     </div>
   </div>
 
@@ -658,8 +763,6 @@
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:10px">
       <span class="topbar-title" id="topbar-title">Overview</span>
-      <span class="status-chip chip-accent">Negotiation</span>
-      <span class="status-chip">No action</span>
     </div>
     <div class="topbar-actions">
       <button class="btn btn-outline" onclick="openModal('pay-modal')">
@@ -679,45 +782,91 @@
     <!-- ── OVERVIEW ──────────────────────────── -->
     <div class="view active" id="view-overview">
 
+      <!-- Profile panel: identity + fields + KPI cards -->
+      <div class="profile-panel">
+        <div>
+          <div class="profile-identity">
+            <div class="profile-avatar">BS</div>
+            <div>
+              <div class="profile-name">Borja Solé</div>
+              <div class="profile-cust-id">2NatWestDemo0107</div>
+            </div>
+          </div>
+          <div class="profile-fields">
+            <div class="profile-field">
+              <div class="profile-field-label">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                Phone
+              </div>
+              <div class="profile-field-value">+34 678 420 485</div>
+            </div>
+            <div class="profile-field">
+              <div class="profile-field-label">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Email
+              </div>
+              <div class="profile-field-value">borja@getmurphy.ai</div>
+            </div>
+            <div class="profile-field">
+              <div class="profile-field-label">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/><path d="M7 8h4m-4 4h4m4-4h2m-2 4h2"/></svg>
+                National ID
+              </div>
+              <div class="profile-field-value">19202122A</div>
+            </div>
+            <div class="profile-field">
+              <div class="profile-field-label">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Date of birth
+              </div>
+              <div class="profile-field-value">04/01/1981</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-col">
+          <div class="kpi-card kpi-navy">
+            <div class="kpi-label">Current Balance</div>
+            <div class="kpi-value">700.00<span class="kpi-unit">GBP</span></div>
+            <div class="kpi-sub">of £700.00 accumulated</div>
+          </div>
+          <div class="kpi-card kpi-green">
+            <div class="kpi-label">Net Collected</div>
+            <div class="kpi-value" style="color:var(--green)">0.00<span class="kpi-unit">GBP</span></div>
+            <div class="kpi-sub">0% paid down</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Current Status</div>
+            <div class="kpi-value" style="font-size:17px">Negotiation</div>
+            <div class="kpi-sub">30 days past due · 0–30 bucket</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Active Payment Plans</div>
+            <div class="kpi-value">0</div>
+            <div class="kpi-sub">Complete assessment to set one up</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nudge banner -->
       <div class="alert alert-amber">
         <div class="alert-icon">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
         </div>
         <div>
           <div class="alert-title">Let's find a plan that works for you</div>
-          <div class="alert-body">You have an outstanding balance of £430.00 on your credit card. Complete your affordability assessment and we'll tailor a repayment option to your budget.</div>
+          <div class="alert-body">You have an outstanding balance of £700.00 on your credit card. Complete your affordability assessment and we'll tailor a repayment option to your budget.</div>
         </div>
       </div>
 
-      <div class="stats-grid">
-        <div class="card stripe-navy">
-          <div class="card-label">Current Balance</div>
-          <div class="card-value">£430.00</div>
-          <div class="card-sub">of £430.00 accumulated</div>
+      <!-- Your Debts (collapsible section) -->
+      <div class="msection" id="sec-debts">
+        <div class="msection-head" onclick="toggleSection('sec-debts')">
+          <span class="msection-chevron"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M19 9l-7 7-7-7"/></svg></span>
+          <span class="msection-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></span>
+          <span class="msection-title">Your Debts</span>
         </div>
-        <div class="card stripe-green">
-          <div class="card-label">Net Collected</div>
-          <div class="card-value" style="color:var(--green)">£0.00</div>
-          <div class="card-sub">0% paid down</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Current Status</div>
-          <div class="card-value" style="font-size:20px">Negotiation</div>
-          <div class="card-sub">30 days past due · 0–30 bucket</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Active Payment Plans</div>
-          <div class="card-value">0</div>
-          <div class="card-sub">Complete assessment to set one up</div>
-        </div>
-      </div>
-
-      <div class="two-col-wide" style="gap:20px">
-        <!-- Debts summary -->
-        <div>
-          <div class="section-header">
-            <div class="section-title">Your Debts</div>
-          </div>
+        <div class="msection-body">
           <div class="table-wrap">
             <table>
               <thead>
@@ -731,28 +880,30 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><span style="font-family:monospace;font-size:12px">1Demo0107</span></td>
+                  <td><span style="font-family:monospace;font-size:12px">2Demo0107</span></td>
                   <td>Credit Card</td>
-                  <td>£430.00</td>
-                  <td class="amount-normal">£430.00</td>
+                  <td>£700.00</td>
+                  <td class="amount-normal">£700.00</td>
                   <td><span class="badge badge-accent"><span class="badge-dot"></span>Negotiation</span></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
+      </div>
 
-        <!-- Recent activity -->
-        <div>
-          <div class="section-header">
-            <div class="section-title">Recent Activity</div>
-          </div>
-          <div class="table-wrap">
-            <div class="empty" style="padding:32px 20px">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <p style="font-weight:600;color:var(--text-secondary);margin-bottom:4px">No recent activity yet</p>
-              <p style="font-size:12px;color:var(--text-tertiary)">Your account activity is pending. Updates will appear here once available.</p>
-            </div>
+      <!-- Recent Activity (collapsible section) -->
+      <div class="msection" id="sec-activity">
+        <div class="msection-head" onclick="toggleSection('sec-activity')">
+          <span class="msection-chevron"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M19 9l-7 7-7-7"/></svg></span>
+          <span class="msection-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span>
+          <span class="msection-title">Recent Activity</span>
+        </div>
+        <div class="msection-body">
+          <div class="empty" style="padding:28px 20px">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p style="font-weight:600;color:var(--text-secondary);margin-bottom:4px">No recent activity yet</p>
+            <p style="font-size:12px;color:var(--text-tertiary)">Your account activity is pending. Updates will appear here once available.</p>
           </div>
         </div>
       </div>
@@ -778,10 +929,10 @@
           </thead>
           <tbody>
             <tr>
-              <td><span style="font-family:monospace;font-size:12px">1Demo0107</span></td>
+              <td><span style="font-family:monospace;font-size:12px">2Demo0107</span></td>
               <td>Credit Card outstanding balance</td>
               <td>30 days past due</td>
-              <td class="amount-normal">£430.00</td>
+              <td class="amount-normal">£700.00</td>
               <td><span class="badge badge-accent"><span class="badge-dot"></span>Negotiation</span></td>
               <td><button class="btn btn-primary" onclick="openModal('pay-modal')" style="padding:5px 12px;font-size:12px">Pay Now</button></td>
             </tr>
@@ -829,7 +980,7 @@
       <div class="card affordability-frame-wrap" style="padding:0;overflow:hidden">
         <iframe
           id="affordability-iframe"
-          src="https://affordability-assessment.getmurphy.ai/sfs/dq8bzpwuxp8e"
+          src="https://affordability-assessment.getmurphy.ai/sfs/7ptnwzza36je"
           title="Murphy affordability assessment"
           loading="lazy"
           scrolling="yes"
@@ -890,7 +1041,7 @@
 <div class="modal-overlay" id="pay-modal" onclick="closeModalOut(event, 'pay-modal')">
   <div class="modal">
     <div class="modal-title">Make a Payment</div>
-    <div class="modal-sub">Select how you'd like to pay your outstanding balance (£430.00)</div>
+    <div class="modal-sub">Select how you'd like to pay your outstanding balance (£700.00)</div>
 
     <div class="modal-option" onclick="selectPayOpt(this,'bank')" id="opt-bank">
       <div class="modal-opt-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 6l9-3 9 3M3 6v6m18-6v6M3 12v6m18-6v6M3 18h18M12 3v18"/></svg></div>
@@ -912,13 +1063,13 @@
       <div class="bank-row"><span class="bank-label">IBAN</span><span class="bank-val" style="color:var(--text-tertiary)">—</span></div>
       <div class="bank-row"><span class="bank-label">BIC</span><span class="bank-val" style="color:var(--text-tertiary)">—</span></div>
       <div class="bank-row"><span class="bank-label">Reference</span><span class="bank-val" style="color:var(--text-tertiary)">—</span></div>
-      <div class="bank-row"><span class="bank-label">Amount</span><span class="bank-val" style="color:var(--purple)">£430.00</span></div>
+      <div class="bank-row"><span class="bank-label">Amount</span><span class="bank-val" style="color:var(--purple)">£700.00</span></div>
     </div>
 
     <!-- QR block -->
     <div class="qr-block" id="qr-block">
       <div class="qr-placeholder">QR Code</div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:4px">£430.00</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:4px">£700.00</div>
       <div style="font-size:12px;color:var(--text-secondary)">Scan with your banking app</div>
     </div>
 
@@ -933,10 +1084,10 @@
 <div class="modal-overlay" id="sign-modal" onclick="closeModalOut(event, 'sign-modal')">
   <div class="modal" style="width:520px">
     <div class="modal-title">Sign Repayment Agreement</div>
-    <div class="modal-sub">Credit Card Repayment Agreement — 1Demo0107 · £430.00 outstanding</div>
+    <div class="modal-sub">Credit Card Repayment Agreement — 2Demo0107 · £700.00 outstanding</div>
 
     <div style="background:var(--bg);border-radius:8px;padding:14px;font-size:12.5px;color:var(--text-secondary);max-height:120px;overflow-y:auto;margin-bottom:16px;line-height:1.6">
-      I, Giacomo Rossi (ID: 1NatWestDemo0107), agree to the repayment terms as described above for the outstanding balance of £430.00 on contract 1Demo0107. I understand that this agreement constitutes a legally binding obligation and that the schedule will be confirmed following my affordability assessment...
+      I, Borja Solé (ID: 2NatWestDemo0107), agree to the repayment terms as described above for the outstanding balance of £700.00 on contract 2Demo0107. I understand that this agreement constitutes a legally binding obligation and that the schedule will be confirmed following my affordability assessment...
     </div>
 
     <div style="font-size:12px;font-weight:600;color:var(--text-tertiary);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Draw your signature below</div>
@@ -966,7 +1117,7 @@
 
 <script>
   // ── Login gate
-  const VALID_EMAIL = 'giacomo.rossi@getmurphy.ai';
+  const VALID_EMAIL = 'borja@getmurphy.ai';
   const VALID_DOB = '04/01/1981';
 
   function normDob(v) {
@@ -1009,6 +1160,11 @@
       if (wrap) wrap.style.height = h + 'px';
     }
   });
+
+  // ── Collapsible sections
+  function toggleSection(id) {
+    document.getElementById(id).classList.toggle('collapsed');
+  }
 
   // ── View switching
   function switchView(name, el) {
