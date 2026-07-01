@@ -5,43 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Customer Portal — NatWest</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #e9e7ef;
-      --surface: #f5f3f6;
-      --border: #e3e1ea;
-      --border-mid: #cccbd9;
-      --text-primary: #160f34;
-      --text-secondary: #7d7984;
-      --text-tertiary: #aea8d4;
-      /* Brand palette accent (repurposing the --purple tokens app-wide) */
-      --purple: #5d51b2;
-      --purple-light: #62579c;
-      --purple-mid: #e7e5f4;
-      --purple-hover: #f1f0f8;
-      --navy: #160f34;
-      --green: #33795e;
-      --green-bg: #dcefe6;
-      --amber: #62579c;
-      --amber-bg: #e7e5f4;
-      --red: #dc2626;
-      --red-bg: #fee2e2;
-      --blue: #5d51b2;
-      --blue-bg: #e7e5f4;
-      --radius: 12px;
+      /* Murphy Front Office (v11) design system — exact tokens */
+      --bg: #f4f2ec;            /* paper-2 (page) */
+      --surface: #fcfaf6;       /* paper (cards/sidebar) */
+      --surface-hover: #f8f6f1; /* paper-hover */
+      --border: #e5dfd3;        /* rule */
+      --border-soft: #efeae0;   /* rule-soft */
+      --border-mid: #e5dfd3;
+      --text-primary: #160d33;  /* ink */
+      --text-secondary: #5c544d;/* ink-3 */
+      --text-tertiary: #8a8278; /* ink-4 */
+      --ink-5: #b8b0a4;
+      /* Purple accent (repurposing the --purple tokens app-wide) */
+      --purple: #5c50b2;
+      --purple-light: #8a7fd9;
+      --purple-ink: #3a2f7a;
+      --purple-mid: #efecfb;    /* purple-wash */
+      --purple-hover: #f7f5fd;  /* purple-tint */
+      --purple-line: #d8d2f0;
+      --navy: #160d33;          /* ink */
+      --teal: #1e988d;
+      --teal-wash: #e2f1ef;
+      --green: #2f6e4f;         /* pos */
+      --green-bg: #e6f0ea;      /* pos-wash */
+      --amber: #a66b1e;         /* warn */
+      --amber-bg: #f5ecdb;      /* warn-wash */
+      --red: #8c2e2e;           /* neg */
+      --red-bg: #f2e0de;        /* neg-wash */
+      --blue: #2c5780;          /* info */
+      --blue-bg: #e6ebf6;       /* info-wash */
+      --radius: 10px;           /* r-lg */
       --sidebar-w: 232px;
+      --shadow-2: 0 8px 24px rgba(20,17,15,0.08), 0 2px 6px rgba(20,17,15,0.04);
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text-primary);
       display: flex;
       min-height: 100vh;
       font-size: 14px;
+      line-height: 1.45;
     }
 
     /* ─── SIDEBAR ─────────────────────────────── */
@@ -91,7 +101,7 @@
 
     .nav-section-label {
       font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.8px;
+      text-transform: uppercase; letter-spacing: 0.12em;
       color: var(--text-tertiary);
       padding: 14px 8px 6px;
     }
@@ -223,7 +233,7 @@
     .card.stripe-green::before { background: var(--green); }
     .card-label {
       font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.8px;
+      text-transform: uppercase; letter-spacing: 0.12em;
       color: var(--text-secondary);
       margin-bottom: 10px;
     }
@@ -254,7 +264,7 @@
       display: grid;
       grid-template-columns: 1.15fr 1fr;
       gap: 32px;
-      box-shadow: 0 1px 2px rgba(28,27,34,0.04), 0 8px 24px rgba(28,27,34,0.03);
+      box-shadow: var(--shadow-2);
     }
     .profile-identity {
       display: flex; align-items: center; gap: 15px;
@@ -301,7 +311,7 @@
       background: var(--surface);
       transition: box-shadow 0.15s, transform 0.15s;
     }
-    .kpi-card:hover { box-shadow: 0 4px 16px rgba(28,27,34,0.06); }
+    .kpi-card:hover { box-shadow: var(--shadow-2); }
     .kpi-card::before {
       content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       background: var(--border);
@@ -309,7 +319,7 @@
     .kpi-card.kpi-navy::before { background: var(--navy); }
     .kpi-card.kpi-green::before { background: var(--green); }
     .kpi-label {
-      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.9px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
       color: var(--text-secondary); margin-bottom: 11px;
     }
     .kpi-value { font-size: 25px; font-weight: 700; letter-spacing: -0.6px; line-height: 1.1; }
@@ -327,7 +337,7 @@
       border-radius: 16px;
       margin-bottom: 20px;
       overflow: hidden;
-      box-shadow: 0 1px 2px rgba(28,27,34,0.04);
+      box-shadow: 0 1px 2px rgba(20,17,15,0.04);
     }
     .msection-head {
       display: flex; align-items: center; gap: 10px;
