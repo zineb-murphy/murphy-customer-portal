@@ -775,7 +775,7 @@
       <span class="topbar-title" id="topbar-title">Overview</span>
     </div>
     <div class="topbar-actions">
-      <button class="btn btn-outline" onclick="openModal('pay-modal')">
+      <button class="btn btn-primary" onclick="openModal('pay-modal')">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
         Make a Payment
       </button>
@@ -836,19 +836,19 @@
 
         <div class="kpi-col">
           <div class="kpi-card kpi-navy">
-            <div class="kpi-label">Current Balance</div>
-            <div class="kpi-value">700.00<span class="kpi-unit">GBP</span></div>
+            <div class="kpi-label">Outstanding Balance</div>
+            <div class="kpi-value" style="color:#d92d20">700.00<span class="kpi-unit">GBP</span></div>
             <div class="kpi-sub">of £700.00 accumulated</div>
           </div>
           <div class="kpi-card kpi-green">
-            <div class="kpi-label">Net Collected</div>
+            <div class="kpi-label">Net Paid</div>
             <div class="kpi-value" style="color:var(--green)">0.00<span class="kpi-unit">GBP</span></div>
             <div class="kpi-sub">0% paid down</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">Current Status</div>
-            <div class="kpi-value" style="font-size:17px">Negotiation</div>
-            <div class="kpi-sub">30 days past due · 0–30 bucket</div>
+            <div class="kpi-label">Days Past Due</div>
+            <div class="kpi-value">30<span class="kpi-unit">days</span></div>
+            <div class="kpi-sub">0–30 days bucket</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Active Payment Plans</div>
@@ -869,12 +869,12 @@
         </div>
       </div>
 
-      <!-- Your Debts (collapsible section) -->
+      <!-- Your Outstanding Balance (collapsible section) -->
       <div class="msection" id="sec-debts">
         <div class="msection-head" onclick="toggleSection('sec-debts')">
           <span class="msection-chevron"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M19 9l-7 7-7-7"/></svg></span>
           <span class="msection-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></span>
-          <span class="msection-title">Your Debts</span>
+          <span class="msection-title">Your Outstanding Balance</span>
         </div>
         <div class="msection-body">
           <div class="table-wrap">
@@ -885,7 +885,6 @@
                   <th>Product</th>
                   <th>Original</th>
                   <th>Outstanding</th>
-                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -894,7 +893,6 @@
                   <td>Credit Card</td>
                   <td>£700.00</td>
                   <td class="amount-normal">£700.00</td>
-                  <td><span class="badge badge-accent"><span class="badge-dot"></span>Negotiation</span></td>
                 </tr>
               </tbody>
             </table>
@@ -931,7 +929,6 @@
             <tr>
               <th>Contract Ref.</th>
               <th>Description</th>
-              <th>Status</th>
               <th>Amount</th>
               <th>Status</th>
               <th>Action</th>
@@ -940,10 +937,9 @@
           <tbody>
             <tr>
               <td><span style="font-family:monospace;font-size:12px">2Demo0107</span></td>
-              <td>Credit Card outstanding balance</td>
-              <td>30 days past due</td>
+              <td>Credit Card</td>
               <td class="amount-normal">£700.00</td>
-              <td><span class="badge badge-accent"><span class="badge-dot"></span>Negotiation</span></td>
+              <td><span class="badge badge-amber"><span class="badge-dot"></span>Overdue by 30 days</span></td>
               <td><button class="btn btn-primary" onclick="openModal('pay-modal')" style="padding:5px 12px;font-size:12px">Pay Now</button></td>
             </tr>
           </tbody>
